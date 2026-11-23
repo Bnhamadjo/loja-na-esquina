@@ -3,6 +3,7 @@
     "name": "loja_na_esquina",
     "slug": "loja_na_esquina",
     "version": "1.0.0",
+    "scheme": "loja_na_esquina",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",

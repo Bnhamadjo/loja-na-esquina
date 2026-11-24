@@ -1,0 +1,33 @@
+{
+  "entryPath": ".open-design/redesign-the-existing-loja-na-esquina-home-dashboard-for-a-s/redesign-the-existing-loja-na-esquina-home-dashboard-for-a-s.html",
+  "id": "2026-11-24T08-46-06",
+  "createdAt": "2026-11-24T08:46:06.856Z",
+  "mode": "page",
+  "errors": 0,
+  "warnings": 2,
+  "findings": [
+    {
+      "severity": "info",
+      "check": "contrast",
+      "message": "Contrast not checked for 4 text element(s) on gradient, image or translucent backgrounds — check those by eye."
+    },
+    {
+      "severity": "warning",
+      "check": "stress-overflow",
+      "message": "With long content (names 2.5 times longer, a 60-character word, 9,999,999): div.stock-name \"Leite Integral 1L Leite Integral 1L Lei…\" is clipped by its container div.stock-name — the text is longer than its box. Let it wrap (overflow-wrap: anywhere), truncate it with the full value in a title, or give it more room."
+    },
+    {
+      "severity": "warning",
+      "check": "stress-truncation",
+      "message": "div.stock-name \"Leite Integral 1L Leite Integral 1L Lei…\" cuts long text off with no way to read the rest. Put the full value in a title attribute, or link to where it can be read in full."
+    }
+  ],
+  "images": [
+    {
+      "label": "android",
+      "file": "01-android.jpg",
+      "width": 412,
+      "height": 867
+    }
+  ]
+}

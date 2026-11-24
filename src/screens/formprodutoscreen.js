@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { useTheme } from '../context/theme-context';
 
 export function FormProdutoScreen({ onAdicionarProduto }) {
+  const { colors } = useTheme();
   const [nome, setNome] = useState('');
   const [preco, setPreco] = useState('');
   const [estoque, setEstoque] = useState('');
@@ -38,14 +40,14 @@ export function FormProdutoScreen({ onAdicionarProduto }) {
   };
 
   return (
-    <View style={styles.formCard}>
-      <Text style={styles.formTitle}>Novo Produto</Text>
-      <TextInput style={styles.input} placeholder="Nome do produto" value={nome} onChangeText={setNome} />
+    <View style={[styles.formCard, { backgroundColor: colors.surface, borderColor: colors.border }]}>
+      <Text style={[styles.formTitle, { color: colors.text }]}>Novo Produto</Text>
+      <TextInput style={[styles.input, { backgroundColor: colors.raised, color: colors.text }]} placeholderTextColor={colors.muted} placeholder="Nome do produto" value={nome} onChangeText={setNome} />
       <View style={styles.row}>
-        <TextInput style={[styles.input, styles.halfInput]} placeholder="Preço (fcfa)" keyboardType="decimal-pad" value={preco} onChangeText={setPreco} />
-        <TextInput style={[styles.input, styles.halfInput]} placeholder="Qtd Estoque" keyboardType="numeric" value={estoque} onChangeText={setEstoque} />
+        <TextInput style={[styles.input, styles.halfInput, { backgroundColor: colors.raised, color: colors.text }]} placeholderTextColor={colors.muted} placeholder="Preço (fcfa)" keyboardType="decimal-pad" value={preco} onChangeText={setPreco} />
+        <TextInput style={[styles.input, styles.halfInput, { backgroundColor: colors.raised, color: colors.text }]} placeholderTextColor={colors.muted} placeholder="Qtd Estoque" keyboardType="numeric" value={estoque} onChangeText={setEstoque} />
       </View>
-      <TouchableOpacity style={styles.btnSalvar} onPress={handleSalvar} disabled={isSaving}>
+      <TouchableOpacity style={[styles.btnSalvar, { backgroundColor: colors.primary }]} onPress={handleSalvar} disabled={isSaving}>
         <Text style={styles.btnSalvarTexto}>{isSaving ? 'A guardar...' : 'Cadastrar Produto'}</Text>
       </TouchableOpacity>
     </View>
@@ -53,11 +55,11 @@ export function FormProdutoScreen({ onAdicionarProduto }) {
 }
 
 const styles = StyleSheet.create({
-  formCard: { backgroundColor: '#FFF', padding: 16, borderRadius: 10, marginTop: 12 },
-  formTitle: { color: '#17212B', fontSize: 17, fontWeight: '700', marginBottom: 12 },
-  input: { backgroundColor: '#F5F6F8', color: '#17212B', padding: 12, borderRadius: 8, marginBottom: 8, fontSize: 14 },
+  formCard: { borderWidth: 1, padding: 16, borderRadius: 16, marginTop: 12 },
+  formTitle: { fontSize: 17, fontWeight: '700', marginBottom: 12 },
+  input: { padding: 12, borderRadius: 12, marginBottom: 8, fontSize: 14 },
   row: { flexDirection: 'row', justifyContent: 'space-between' },
   halfInput: { flex: 1, marginHorizontal: 3 },
-  btnSalvar: { backgroundColor: '#2457C5', padding: 13, borderRadius: 8, alignItems: 'center', marginTop: 2 },
-  btnSalvarTexto: { color: '#FFF', fontWeight: '700' },
+  btnSalvar: { padding: 13, borderRadius: 12, alignItems: 'center', marginTop: 2 },
+  btnSalvarTexto: { color: '#FFFFFF', fontWeight: '700' },
 });

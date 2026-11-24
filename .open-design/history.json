@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "entries": [
+    {
+      "entryPath": ".open-design/redesign-the-existing-loja-na-esquina-home-dashboard-for-a-s/redesign-the-existing-loja-na-esquina-home-dashboard-for-a-s.html",
+      "title": "Painel da loja · Modo escuro",
+      "skillId": "od:prototype:dashboard",
+      "date": "2026-11-24T08:46:55.047Z",
+      "signature": {
+        "theme": "dark",
+        "hero": "centred"
+      }
+    }
+  ]
+}

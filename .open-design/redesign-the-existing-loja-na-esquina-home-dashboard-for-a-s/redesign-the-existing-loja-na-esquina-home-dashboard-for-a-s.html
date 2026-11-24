@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="pt">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#10141B">
+  <title>Painel · Loja na Esquina</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --canvas: #10141B;
+      --surface: #191F29;
+      --surface-raised: #202834;
+      --line: #303A48;
+      --text: #F4F7FB;
+      --muted: #A7B1C0;
+      --quiet: #7E8A9B;
+      --blue: #2563EB;
+      --teal: #14B8A6;
+      --radius: 16px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--canvas);
+      color: var(--text);
+      font-synthesis: none;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body { min-height: 100%; margin: 0; }
+
+    body {
+      background: var(--canvas);
+      font-size: 15px;
+    }
+
+    button { font: inherit; }
+
+    .screen {
+      width: min(100%, 480px);
+      min-height: 100vh;
+      margin: 0 auto;
+      padding: 27px 20px 34px;
+      overflow: hidden;
+      background: var(--canvas);
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      margin-bottom: 30px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: .01em;
+    }
+
+    .brand-mark {
+      display: grid;
+      width: 34px;
+      height: 34px;
+      place-items: center;
+      border: 1px solid rgba(37, 99, 235, .42);
+      border-radius: 12px;
+      background: rgba(37, 99, 235, .14);
+      color: #8FB1FF;
+      font-size: 14px;
+      font-weight: 750;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 32px;
+      font-weight: 740;
+      letter-spacing: -.045em;
+      line-height: 1.12;
+    }
+
+    .intro {
+      margin: 8px 0 22px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .sales-card {
+      position: relative;
+      display: flex;
+      min-height: 154px;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+      padding: 20px;
+      border: 1px solid rgba(37, 99, 235, .34);
+      border-radius: var(--radius);
+      background: var(--surface);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, .22);
+    }
+
+    .sales-card::after {
+      position: absolute;
+      top: -34px;
+      right: -37px;
+      width: 132px;
+      height: 132px;
+      border: 1px solid rgba(37, 99, 235, .2);
+      border-radius: 50%;
+      content: "";
+      pointer-events: none;
+    }
+
+    .sales-label {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .sales-value {
+      margin-top: 12px;
+      font-size: clamp(32px, 9vw, 42px);
+      font-weight: 760;
+      letter-spacing: -.055em;
+      line-height: 1;
+    }
+
+    .sales-caption {
+      margin-top: 9px;
+      color: var(--quiet);
+      font-size: 12px;
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .metric {
+      min-height: 92px;
+      padding: 15px 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, .14);
+    }
+
+    .metric-label {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 550;
+    }
+
+    .metric-value {
+      margin-top: 8px;
+      font-size: 23px;
+      font-weight: 720;
+      letter-spacing: -.035em;
+    }
+
+    .metric-low .metric-value { color: var(--teal); }
+
+    .section-heading {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      margin: 26px 0 12px;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 17px;
+      font-weight: 680;
+      letter-spacing: -.02em;
+    }
+
+    .section-note {
+      color: var(--quiet);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .actions {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .action {
+      display: flex;
+      min-height: 126px;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: space-between;
+      padding: 15px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface-raised);
+      color: var(--text);
+      text-align: left;
+      cursor: pointer;
+      transition: transform 160ms ease, border-color 160ms ease, background-color 160ms ease;
+    }
+
+    .action:hover { transform: translateY(-2px); }
+    .action:active { transform: scale(.985); }
+    .action:focus-visible { outline: 3px solid var(--teal); outline-offset: 3px; }
+
+    .action-sale { border-color: rgba(37, 99, 235, .48); }
+    .action-sale:hover { background: #232F42; }
+    .action-purchase { border-color: rgba(20, 184, 166, .4); }
+    .action-purchase:hover { background: #203532; }
+
+    .action-symbol {
+      display: grid;
+      width: 31px;
+      height: 31px;
+      place-items: center;
+      border-radius: 11px;
+      background: rgba(37, 99, 235, .17);
+      color: #A8C1FF;
+      font-size: 17px;
+      font-weight: 700;
+    }
+
+    .action-purchase .action-symbol {
+      background: rgba(20, 184, 166, .16);
+      color: #74E1D2;
+    }
+
+    .action-title {
+      display: block;
+      font-size: 14px;
+      font-weight: 680;
+      line-height: 1.25;
+    }
+
+    .action-hint {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.35;
+    }
+
+    .stock-list {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, .14);
+    }
+
+    .stock-row {
+      display: flex;
+      min-height: 66px;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 12px 15px;
+    }
+
+    .stock-row + .stock-row { border-top: 1px solid var(--line); }
+    .stock-row > div { min-width: 0; flex: 1; }
+
+    .stock-name {
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 600;
+      overflow-wrap: anywhere;
+      white-space: normal;
+    }
+
+    .stock-caption {
+      margin-top: 4px;
+      color: var(--quiet);
+      font-size: 11px;
+    }
+
+    .stock-count {
+      max-width: 108px;
+      flex: 0 1 auto;
+      padding: 6px 9px;
+      border: 1px solid rgba(20, 184, 166, .27);
+      border-radius: 10px;
+      background: rgba(20, 184, 166, .1);
+      color: #74E1D2;
+      font-size: 12px;
+      font-weight: 700;
+      overflow-wrap: anywhere;
+      text-align: center;
+      white-space: normal;
+    }
+
+    .empty {
+      padding: 18px 16px;
+      border: 1px dashed var(--line);
+      border-radius: var(--radius);
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    @media (min-width: 700px) {
+      .screen {
+        min-height: 100vh;
+        padding: 36px 28px 42px;
+      }
+
+      .topbar { margin-bottom: 36px; }
+      .intro { margin-bottom: 27px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  </style>
+</head>
+<body data-od-device="android">
+  <div class="screen">
+    <header class="topbar" data-od-id="brand">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">N</span>
+        <span>NHAFIN</span>
+      </div>
+    </header>
+
+    <main>
+      <section aria-labelledby="page-title" data-od-id="overview">
+        <h1 id="page-title">Painel</h1>
+        <p class="intro">Resumo do negócio e atalhos para as operações.</p>
+
+        <div class="sales-card">
+          <div class="sales-label">Vendas registadas</div>
+          <div>
+            <div class="sales-value">FCFA 47</div>
+            <div class="sales-caption">Exemplo: soma das vendas iniciais, arredondada</div>
+          </div>
+        </div>
+
+        <div class="metrics" aria-label="Resumo do catálogo">
+          <article class="metric">
+            <div class="metric-label">Produtos</div>
+            <div class="metric-value">3</div>
+          </article>
+          <article class="metric metric-low">
+            <div class="metric-label">Stock baixo</div>
+            <div class="metric-value">1</div>
+          </article>
+        </div>
+      </section>
+
+      <section aria-labelledby="actions-title" data-od-id="quick-actions">
+        <div class="section-heading">
+          <h2 id="actions-title">Acesso rápido</h2>
+        </div>
+        <div class="actions">
+          <button class="action action-sale" type="button" aria-label="Registar venda">
+            <span class="action-symbol" aria-hidden="true">↗</span>
+            <span>
+              <span class="action-title">Registar venda</span>
+              <span class="action-hint">Baixar stock e guardar o total</span>
+            </span>
+          </button>
+          <button class="action action-purchase" type="button" aria-label="Registar compra">
+            <span class="action-symbol" aria-hidden="true">↙</span>
+            <span>
+              <span class="action-title">Registar compra</span>
+              <span class="action-hint">Adicionar unidades ao stock</span>
+            </span>
+          </button>
+        </div>
+      </section>
+
+      <section aria-labelledby="stock-title" data-od-id="low-stock">
+        <div class="section-heading">
+          <h2 id="stock-title">Produtos a repor</h2>
+          <span class="section-note">Abaixo de 10 un.</span>
+        </div>
+        <div class="stock-list">
+          <div class="stock-row">
+            <div>
+              <div class="stock-name">Leite Integral 1L</div>
+              <div class="stock-caption">FCFA 6 por unidade</div>
+            </div>
+            <span class="stock-count">8 un.</span>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>

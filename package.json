@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "main": "expo-router/entry",
   "dependencies": {
+    "@expo/ui": "~58.0.29",
     "@react-native-async-storage/async-storage": "2.2.0",
+    "autoskills": "^0.4.1",
     "expo": "~58.0.26",
     "expo-constants": "~58.0.16",
     "expo-linking": "~58.0.17",
@@ -20,7 +22,12 @@
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "lint": "expo lint"
   },
-  "private": true
+  "private": true,
+  "devDependencies": {
+    "eslint": "^9.0.0",
+    "eslint-config-expo": "~58.0.4"
+  }
 }

@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "path": "src/DESIGN.md",
+  "sha256": "a39e47cbd53c6bcc9ad2c3e729ac763fd4153dc5650a0cb73b79f51fe360e449",
+  "kind": "markdown",
+  "extractedAt": "2026-11-24T08:41:21.858Z",
+  "markdownPath": ".open-design/sources/src-design-md/source.md",
+  "lines": 18,
+  "chars": 289,
+  "sections": [
+    {
+      "heading": "(whole document)",
+      "level": 0,
+      "startLine": 1,
+      "endLine": 19,
+      "chars": 289
+    }
+  ],
+  "assets": [],
+  "warnings": []
+}

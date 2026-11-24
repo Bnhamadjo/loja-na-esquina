@@ -1,6 +1,7 @@
 import { Tabs } from 'expo-router';
 import { Text } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useTheme } from '../../context/theme-context';
 
 function TabIcon({ color, symbol }) {
   return <Text style={{ color, fontSize: 19, fontWeight: '700' }}>{symbol}</Text>;
@@ -8,17 +9,18 @@ function TabIcon({ color, symbol }) {
 
 export default function TabLayout() {
   const insets = useSafeAreaInsets();
+  const { colors } = useTheme();
   return (
-    <SafeAreaView style={styles.safeArea} edges={['top', 'left', 'right']}>
+    <SafeAreaView style={[styles.safeArea, { backgroundColor: colors.background }]} edges={['top', 'left', 'right']}>
       <Tabs screenOptions={{
         headerShown: false,
         tabBarHideOnKeyboard: true,
-        tabBarActiveTintColor: '#2457C5',
-        tabBarInactiveTintColor: '#667085',
+        tabBarActiveTintColor: colors.primary,
+        tabBarInactiveTintColor: colors.muted,
         tabBarLabelStyle: { fontSize: 10, fontWeight: '600' },
         tabBarStyle: {
-          backgroundColor: '#FFFFFF',
-          borderTopColor: '#E4E7EC',
+          backgroundColor: colors.surface,
+          borderTopColor: colors.border,
           height: 62 + insets.bottom,
           paddingTop: 6,
           paddingBottom: Math.max(insets.bottom, 6),
@@ -29,13 +31,11 @@ export default function TabLayout() {
         <Tabs.Screen name="sales" options={{ title: 'Vendas', tabBarLabel: 'Vender', tabBarIcon: ({ color }) => <TabIcon color={color} symbol="↗" /> }} />
         <Tabs.Screen name="purchase" options={{ title: 'Compras', tabBarLabel: 'Comprar', tabBarIcon: ({ color }) => <TabIcon color={color} symbol="↙" /> }} />
         <Tabs.Screen name="more" options={{ title: 'Mais', tabBarLabel: 'Mais', tabBarIcon: ({ color }) => <TabIcon color={color} symbol="•••" /> }} />
-        <Tabs.Screen name="history" options={{ href: null }} />
-        <Tabs.Screen name="reports" options={{ href: null }} />
       </Tabs>
     </SafeAreaView>
   );
 }
 
 const styles = {
-  safeArea: { flex: 1, backgroundColor: '#F5F6F8' },
+  safeArea: { flex: 1 },
 };

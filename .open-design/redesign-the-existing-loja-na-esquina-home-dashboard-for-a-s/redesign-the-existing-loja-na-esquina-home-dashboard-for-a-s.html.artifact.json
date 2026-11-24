@@ -1,0 +1,53 @@
+{
+  "version": 1,
+  "kind": "html",
+  "title": "Painel da loja · Modo escuro",
+  "entry": ".open-design/redesign-the-existing-loja-na-esquina-home-dashboard-for-a-s/redesign-the-existing-loja-na-esquina-home-dashboard-for-a-s.html",
+  "renderer": "html",
+  "status": "complete",
+  "exports": [
+    "html",
+    "standalone",
+    "site",
+    "png",
+    "jpeg",
+    "pdf"
+  ],
+  "createdAt": "2026-11-24T08:46:55.037Z",
+  "updatedAt": "2026-11-24T08:46:55.037Z",
+  "sourceSkillId": "od:prototype:dashboard",
+  "sources": [
+    {
+      "path": "src/DESIGN.md",
+      "sha256": "a39e47cbd53c6bcc9ad2c3e729ac763fd4153dc5650a0cb73b79f51fe360e449"
+    }
+  ],
+  "metadata": {
+    "brief": {
+      "text": "Redesign the existing Loja na Esquina home dashboard for a small neighborhood shop, following src/DESIGN.md and preserving its metrics, low-stock list and quick actions.",
+      "answers": {
+        "task": "Find and manage records",
+        "platform": "Android",
+        "density": "Medium"
+      },
+      "assumptions": [
+        "Dark mode is the default and only focus for this screen.",
+        "Keep all current metrics, low-stock items, Portuguese copy and existing routes.",
+        "Use the existing React Native file and conventions; no new dependencies."
+      ]
+    },
+    "critique": {
+      "verdict": "polish",
+      "findings": [
+        {
+          "area": "fit",
+          "fix": "Remove the avatar and keep the header focused on the existing NHAFIN brand.",
+          "where": "Header profile circle",
+          "problem": "The invented profile avatar suggests an account feature that does not exist in the app."
+        }
+      ],
+      "at": "2026-11-24T08:46:55.026Z",
+      "checkRunId": "2026-11-24T08-46-23"
+    }
+  }
+}

@@ -66,6 +66,12 @@ Os comandos `android` e `ios` iniciam o Expo para abrir a aplicação num dispos
 - **Relatórios** apresenta totais acumulados de vendas e compras, unidades em stock, produtos com stock baixo e uma estimativa do valor potencial do stock.
 - O valor potencial é calculado com os preços atuais de venda e **não representa lucro**.
 
+### Aparência
+
+- Em **Mais > Aparência**, use o interruptor **Modo escuro** para alternar entre tema escuro e claro.
+- A escolha é guardada localmente com AsyncStorage na chave `@nhafin/theme-mode-v1`; o modo escuro é usado quando ainda não existe preferência guardada.
+- O tema aplica-se às telas, cartões, formulários, barra de separadores e barra de estado.
+
 ## Navegação e rotas
 
 As telas vivem em `src/app/tabs/`. No Expo Router, o caminho da rota é derivado da localização e do nome do ficheiro:
@@ -77,10 +83,10 @@ As telas vivem em `src/app/tabs/`. No Expo Router, o caminho da rota é derivado
 | Vendas | `src/app/tabs/sales.js` | `/tabs/sales` |
 | Compras | `src/app/tabs/purchase.js` | `/tabs/purchase` |
 | Mais opções | `src/app/tabs/more.js` | `/tabs/more` |
-| Histórico | `src/app/tabs/history.js` | `/tabs/history` |
-| Relatórios | `src/app/tabs/reports.js` | `/tabs/reports` |
+| Histórico | `src/app/history.js` | `/history` |
+| Relatórios | `src/app/reports.js` | `/reports` |
 
-Ao adicionar ou renomear uma tela, atualize também os respetivos `router.push(...)` e, quando aplicável, o `<Tabs.Screen name="...">` em `src/app/tabs/_layout.js`. O nome em `<Tabs.Screen>` deve corresponder ao nome do ficheiro sem a extensão. Histórico e Relatórios não aparecem na barra de separadores (`href: null`), mas continuam a ser acessíveis pelos seus caminhos completos a partir de **Mais**.
+Ao adicionar ou renomear uma tela, atualize também os respetivos `router.push(...)` e, quando aplicável, o `<Tabs.Screen name="...">` em `src/app/tabs/_layout.js`. O nome em `<Tabs.Screen>` deve corresponder ao nome do ficheiro sem a extensão. Histórico e Relatórios são rotas do Stack principal, fora de `src/app/tabs/`, e são acessíveis a partir de **Mais**; o cabeçalho dessas telas fornece o botão de voltar. Não as coloque como rotas ocultas das tabs, pois isso pode redirecionar a navegação para o Painel.
 
 ## Dados e persistência
 
@@ -95,6 +101,7 @@ Ao adicionar ou renomear uma tela, atualize também os respetivos `router.push(.
 - `src/app/`: telas e layouts de navegação do Expo Router.
 - `src/components/`: componentes reutilizáveis, incluindo os formulários de transação.
 - `src/context/AppDataContext.js`: estado, validações das operações e persistência local.
+- `src/context/theme-context.js`: tema claro/escuro e persistência da preferência visual.
 - `src/screens/`: telas e formulários partilhados pelas rotas.
 - `src/services/mockData.js`: dados iniciais e cálculo do resumo do painel.
 

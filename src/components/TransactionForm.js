@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { Alert, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { useTheme } from '../context/theme-context';
 
 function formatCurrency(value) {
   return `FCFA ${value.toLocaleString('fr-FR', { maximumFractionDigits: 2 })}`;
 }
 
 export function TransactionForm({ type, products, onSubmit }) {
+  const { colors } = useTheme();
   const isPurchase = type === 'purchase';
   const availableProducts = isPurchase ? products : products.filter((product) => product.estoque > 0);
   const [selectedProductId, setSelectedProductId] = useState(availableProducts[0]?.id ?? '');
@@ -53,16 +55,16 @@ export function TransactionForm({ type, products, onSubmit }) {
     : null;
 
   return (
-    <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled">
-      <Text style={styles.eyebrow}>{isPurchase ? 'REPOSIÇÃO DE STOCK' : 'VENDA AO CLIENTE'}</Text>
-      <Text style={styles.pageTitle}>{isPurchase ? 'Registar compra' : 'Registar venda'}</Text>
-      <Text style={styles.subtitle}>
+    <ScrollView style={{ backgroundColor: colors.background }} contentContainerStyle={[styles.container, { backgroundColor: colors.background }]} contentInsetAdjustmentBehavior="automatic" keyboardShouldPersistTaps="handled">
+      <Text style={[styles.eyebrow, { color: colors.secondaryText }]}>{isPurchase ? 'REPOSIÇÃO DE STOCK' : 'VENDA AO CLIENTE'}</Text>
+      <Text style={[styles.pageTitle, { color: colors.text }]}>{isPurchase ? 'Registar compra' : 'Registar venda'}</Text>
+      <Text style={[styles.subtitle, { color: colors.secondaryText }]}>
         {isPurchase ? 'Registe a entrada de unidades e o custo pago.' : 'Escolha o produto e confirme a quantidade vendida.'}
       </Text>
-      <View style={styles.card}>
-        <Text style={styles.label}>Produto</Text>
+      <View style={[styles.card, { backgroundColor: colors.surface, borderColor: colors.border }]}>
+        <Text style={[styles.label, { color: colors.text }]}>Produto</Text>
         {availableProducts.length === 0 ? (
-          <Text style={styles.empty}>
+          <Text style={[styles.empty, { color: colors.secondaryText }]}>
             {isPurchase ? 'Cadastre um produto antes de registar uma compra.' : 'Não há produtos com stock disponível.'}
           </Text>
         ) : (
@@ -74,11 +76,15 @@ export function TransactionForm({ type, products, onSubmit }) {
                   key={product.id}
                   accessibilityRole="button"
                   accessibilityState={{ selected: isSelected }}
-                  style={[styles.productOption, isSelected && styles.productOptionSelected]}
+                  style={[
+                    styles.productOption,
+                    { backgroundColor: colors.raised, borderColor: colors.border },
+                    isSelected && { backgroundColor: colors.secondarySoft, borderColor: colors.secondary },
+                  ]}
                   onPress={() => setSelectedProductId(product.id)}
                 >
-                  <Text style={[styles.productName, isSelected && styles.selectedText]}>{product.nome}</Text>
-                  <Text style={[styles.productDetails, isSelected && styles.selectedText]}>
+                  <Text style={[styles.productName, { color: isSelected ? colors.secondaryTextStrong : colors.text }]}>{product.nome}</Text>
+                  <Text style={[styles.productDetails, { color: isSelected ? colors.secondaryTextStrong : colors.secondaryText }]}>
                     {isPurchase
                       ? `${product.estoque} un em stock`
                       : `${product.estoque} un · ${formatCurrency(product.preco)}`}
@@ -89,19 +95,19 @@ export function TransactionForm({ type, products, onSubmit }) {
           </View>
         )}
 
-        <Text style={styles.label}>Quantidade</Text>
-        <TextInput style={styles.input} keyboardType="number-pad" value={quantity} onChangeText={setQuantity} placeholder="Ex.: 2" />
+        <Text style={[styles.label, { color: colors.text }]}>Quantidade</Text>
+        <TextInput style={[styles.input, { backgroundColor: colors.raised, color: colors.text }]} placeholderTextColor={colors.muted} keyboardType="number-pad" value={quantity} onChangeText={setQuantity} placeholder="Ex.: 2" />
         {isPurchase && (
           <>
-            <Text style={styles.label}>Custo unitário (FCFA)</Text>
-            <TextInput style={styles.input} keyboardType="decimal-pad" value={unitCost} onChangeText={setUnitCost} placeholder="Ex.: 1000" />
+            <Text style={[styles.label, { color: colors.text }]}>Custo unitário (FCFA)</Text>
+            <TextInput style={[styles.input, { backgroundColor: colors.raised, color: colors.text }]} placeholderTextColor={colors.muted} keyboardType="decimal-pad" value={unitCost} onChangeText={setUnitCost} placeholder="Ex.: 1000" />
           </>
         )}
         {estimatedTotal !== null && Number.isFinite(estimatedTotal) && (
-          <Text style={styles.total}>Total: {formatCurrency(estimatedTotal)}</Text>
+          <Text style={[styles.total, { color: colors.text }]}>Total: {formatCurrency(estimatedTotal)}</Text>
         )}
         <TouchableOpacity
-          style={[styles.submitButton, (isSaving || availableProducts.length === 0) && styles.disabledButton]}
+          style={[styles.submitButton, { backgroundColor: colors.primary }, (isSaving || availableProducts.length === 0) && styles.disabledButton]}
           onPress={handleSubmit}
           disabled={isSaving || availableProducts.length === 0}
         >
@@ -115,22 +121,20 @@ export function TransactionForm({ type, products, onSubmit }) {
 }
 
 const styles = StyleSheet.create({
-  container: { alignSelf: 'center', width: '100%', maxWidth: 680, flexGrow: 1, paddingHorizontal: 18, paddingTop: 22, paddingBottom: 28, backgroundColor: '#F5F6F8' },
-  eyebrow: { color: '#667085', fontSize: 11, fontWeight: '700', letterSpacing: 1 },
-  pageTitle: { color: '#17212B', fontSize: 28, fontWeight: '800', marginTop: 8 },
-  subtitle: { color: '#667085', fontSize: 14, lineHeight: 20, marginTop: 5, marginBottom: 16 },
-  card: { backgroundColor: '#FFF', borderRadius: 10, padding: 16 },
-  label: { color: '#344054', fontWeight: '600', marginBottom: 7, marginTop: 10 },
+  container: { alignSelf: 'center', width: '100%', maxWidth: 680, flexGrow: 1, paddingHorizontal: 18, paddingTop: 22, paddingBottom: 28 },
+  eyebrow: { fontSize: 11, fontWeight: '700', letterSpacing: 1 },
+  pageTitle: { fontSize: 28, fontWeight: '800', marginTop: 8 },
+  subtitle: { fontSize: 14, lineHeight: 20, marginTop: 5, marginBottom: 16 },
+  card: { borderWidth: 1, borderRadius: 16, padding: 16 },
+  label: { fontWeight: '600', marginBottom: 7, marginTop: 10 },
   productList: { gap: 8 },
-  productOption: { borderWidth: 1, borderColor: '#E4E7EC', borderRadius: 8, padding: 12 },
-  productOptionSelected: { backgroundColor: '#E8F4EC', borderColor: '#14804A' },
-  productName: { color: '#17212B', fontWeight: '600' },
-  productDetails: { color: '#667085', fontSize: 12, marginTop: 4 },
-  selectedText: { color: '#146C43' },
-  empty: { color: '#667085', lineHeight: 20, paddingVertical: 12 },
-  input: { backgroundColor: '#F5F6F8', color: '#17212B', borderRadius: 8, padding: 12, fontSize: 16 },
-  total: { color: '#17212B', fontSize: 18, fontWeight: '700', marginTop: 18 },
-  submitButton: { backgroundColor: '#2457C5', borderRadius: 8, alignItems: 'center', padding: 14, marginTop: 18 },
+  productOption: { borderWidth: 1, borderRadius: 12, padding: 12 },
+  productName: { fontWeight: '600' },
+  productDetails: { fontSize: 12, marginTop: 4 },
+  empty: { lineHeight: 20, paddingVertical: 12 },
+  input: { borderRadius: 12, padding: 12, fontSize: 16 },
+  total: { fontSize: 18, fontWeight: '700', marginTop: 18 },
+  submitButton: { borderRadius: 12, alignItems: 'center', padding: 14, marginTop: 18 },
   disabledButton: { opacity: 0.5 },
-  submitText: { color: '#FFF', fontWeight: 'bold' },
+  submitText: { color: '#FFFFFF', fontWeight: 'bold' },
 });

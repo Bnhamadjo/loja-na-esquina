@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import React, { createContext, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { useTheme } from './theme-context';
 import { PRODUTOS_INICIAIS, VENDAS_INICIAIS } from '../services/mockData';
 
 const STORAGE_KEY = '@nhafin/app-data-v1';
@@ -47,20 +48,25 @@ function createId() {
 }
 
 export function AppDataProvider({ children }) {
+  const { colors } = useTheme();
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState(null);
   const dataRef = useRef(null);
   const writeQueue = useRef(Promise.resolve());
 
+  const readData = useCallback(async () => {
+      const storedValue = await AsyncStorage.getItem(STORAGE_KEY);
+      return storedValue === null
+        ? createInitialData()
+        : parseStoredData(storedValue);
+  }, []);
+
   const loadData = useCallback(async () => {
     setIsLoading(true);
     setLoadError(null);
     try {
-      const storedValue = await AsyncStorage.getItem(STORAGE_KEY);
-      const loadedData = storedValue === null
-        ? createInitialData()
-        : parseStoredData(storedValue);
+      const loadedData = await readData();
       dataRef.current = loadedData;
       setData(loadedData);
     } catch (error) {
@@ -70,11 +76,28 @@ export function AppDataProvider({ children }) {
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [readData]);
 
   useEffect(() => {
-    loadData();
-  }, [loadData]);
+    let isActive = true;
+
+    readData().then((loadedData) => {
+      if (!isActive) return;
+      dataRef.current = loadedData;
+      setData(loadedData);
+    }).catch((error) => {
+      if (!isActive) return;
+      dataRef.current = null;
+      setData(null);
+      setLoadError(error instanceof Error ? error.message : String(error));
+    }).finally(() => {
+      if (isActive) setIsLoading(false);
+    });
+
+    return () => {
+      isActive = false;
+    };
+  }, [readData]);
 
   const commit = useCallback((update) => {
     const operation = writeQueue.current.then(async () => {
@@ -174,19 +197,19 @@ export function AppDataProvider({ children }) {
 
   if (isLoading) {
     return (
-      <View style={styles.centered}>
-        <ActivityIndicator size="large" color="#007AFF" />
-        <Text style={styles.message}>A carregar os dados...</Text>
+      <View style={[styles.centered, { backgroundColor: colors.background }]}>
+        <ActivityIndicator size="large" color={colors.primary} />
+        <Text style={[styles.message, { color: colors.secondaryText }]}>A carregar os dados...</Text>
       </View>
     );
   }
 
   if (loadError) {
     return (
-      <View style={styles.centered}>
-        <Text style={styles.errorTitle}>Não foi possível carregar os dados</Text>
-        <Text style={styles.message}>{loadError}</Text>
-        <TouchableOpacity style={styles.retryButton} onPress={loadData}>
+      <View style={[styles.centered, { backgroundColor: colors.background }]}>
+        <Text style={[styles.errorTitle, { color: colors.text }]}>Não foi possível carregar os dados</Text>
+        <Text style={[styles.message, { color: colors.secondaryText }]}>{loadError}</Text>
+        <TouchableOpacity style={[styles.retryButton, { backgroundColor: colors.primary }]} onPress={loadData}>
           <Text style={styles.retryText}>Tentar novamente</Text>
         </TouchableOpacity>
       </View>
@@ -201,7 +224,7 @@ export function AppDataProvider({ children }) {
 }
 
 export function useAppData() {
-  const context = useContext(AppDataContext);
+  const context = React.use(AppDataContext);
   if (!context) {
     throw new Error('useAppData deve ser utilizado dentro de AppDataProvider.');
   }
@@ -209,9 +232,9 @@ export function useAppData() {
 }
 
 const styles = StyleSheet.create({
-  centered: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 24, backgroundColor: '#F2F2F7' },
-  message: { color: '#666', textAlign: 'center', marginTop: 12 },
-  errorTitle: { fontSize: 18, fontWeight: 'bold', textAlign: 'center', color: '#1C1C1E' },
-  retryButton: { backgroundColor: '#007AFF', padding: 12, borderRadius: 8, marginTop: 18 },
-  retryText: { color: '#FFF', fontWeight: 'bold' },
+  centered: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 24 },
+  message: { textAlign: 'center', marginTop: 12 },
+  errorTitle: { fontSize: 18, fontWeight: 'bold', textAlign: 'center' },
+  retryButton: { padding: 12, borderRadius: 12, marginTop: 18 },
+  retryText: { color: '#FFFFFF', fontWeight: 'bold' },
 });

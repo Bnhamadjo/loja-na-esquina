@@ -1,0 +1,28 @@
+{
+  "entryPath": ".open-design/redesign-the-existing-loja-na-esquina-home-dashboard-for-a-s/redesign-the-existing-loja-na-esquina-home-dashboard-for-a-s.html",
+  "id": "2026-11-24T08-45-40",
+  "createdAt": "2026-11-24T08:45:40.538Z",
+  "mode": "page",
+  "errors": 0,
+  "warnings": 1,
+  "findings": [
+    {
+      "severity": "info",
+      "check": "contrast",
+      "message": "Contrast not checked for 4 text element(s) on gradient, image or translucent backgrounds — check those by eye."
+    },
+    {
+      "severity": "warning",
+      "check": "stress-overflow",
+      "message": "With long content (names 2.5 times longer, a 60-character word, 9,999,999): span.stock-count \"8 un. 8 un. 8\" is clipped by its container div.stock-list — the text is longer than its box. Let it wrap (overflow-wrap: anywhere), truncate it with the full value in a title, or give it more room."
+    }
+  ],
+  "images": [
+    {
+      "label": "android",
+      "file": "01-android.jpg",
+      "width": 412,
+      "height": 867
+    }
+  ]
+}

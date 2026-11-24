@@ -1,0 +1,23 @@
+{
+  "entryPath": ".open-design/redesign-the-existing-loja-na-esquina-home-dashboard-for-a-s/redesign-the-existing-loja-na-esquina-home-dashboard-for-a-s.html",
+  "id": "2026-11-24T08-47-02",
+  "createdAt": "2026-11-24T08:47:02.613Z",
+  "mode": "page",
+  "errors": 0,
+  "warnings": 0,
+  "findings": [
+    {
+      "severity": "info",
+      "check": "contrast",
+      "message": "Contrast not checked for 4 text element(s) on gradient, image or translucent backgrounds — check those by eye."
+    }
+  ],
+  "images": [
+    {
+      "label": "android",
+      "file": "01-android.jpg",
+      "width": 412,
+      "height": 867
+    }
+  ]
+}
